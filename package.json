@@ -1,0 +1,36 @@
+{
+  "name": "leak-of-legends",
+  "version": "1.0.0",
+  "description": "prototype app for train webscrapping and be usable from a portfolio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "leak-of-legends"
+  },
+  "keywords": [
+    "leak",
+    "of",
+    "legends"
+  ],
+  "author": "murilo-bracero",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cheerio": "^1.0.0-rc.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.4",
+    "mongoose-paginate": "^5.0.3",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "require-dir": "^1.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
