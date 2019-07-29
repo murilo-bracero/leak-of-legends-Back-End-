@@ -12,7 +12,7 @@ This API is responsible for manage all Leak of Legends accounts, make all web-sc
 2. Login and authentication token system.
 3. Latest League of Legends news.
 4. Custom user profile settings.
-5. Find engine for another users.
+5. User search engine.
 
 ## Legal Notices
 
