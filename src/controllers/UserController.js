@@ -47,7 +47,7 @@ const scrappingChamps = async() => {
             .then( $ => {
                 $('table').find('tbody > tr').each( (index,element) => {
                     var champ = $(element).find('img').attr('alt');
-                    if(champ !== null && champ !== undefined){
+                    if(champ !== null && champ !== undefined && champ !== "BE icon"){
                         champList.push(champ.replace('Square', '').replace('&#039;', "'"));
                     }
                 } )
