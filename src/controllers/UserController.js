@@ -2,7 +2,9 @@ const request = require('request-promise');
 const cheerio = require('cheerio');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+
 const modelUser = mongoose.model('User');
+const modelFriends = mongoose.model('Friends');
 
 
 const search = async (user, country) => {
@@ -12,7 +14,15 @@ const search = async (user, country) => {
     }
 
     return request(options)
-            .then($ => $('.Name').html())
+            .then($ => {
+                const Elo = $('.TierRank').text();
+                return {
+                    username: $('.Name').html(),
+                    PerfilUri: $('.ProfileImage').attr('src').replace('//', ''),
+                    Elo: Elo.includes('Unranked') ? 'Unranked' : Elo
+                }
+                
+            })
             .catch(err => err);
 }
 
@@ -70,16 +80,25 @@ module.exports = {
     async save(req, res){
         const { username, country, password } = req.body;
         const result = await search(username, country);
-        if(result == null) return res.status(404).json({"message": "User doesnt exist in LoL database"});
+
+        const {PerfilUri, Elo} = result;
+
+        if(result.username == null) return res.status(404).json({"message": "User doesnt exist in LoL database"});
+
         try{
+            const friendList = await modelFriends.create({});
             await modelUser.create({
-                username,
-                password
-            });
-            return res.status(200).json({"message":"success"});
+                Username: username,
+                Password: password,
+                Country: country,
+                PerfilUri,
+                Elo,
+                Friends: friendList
+            }).catch( err => console.log(err));
         }catch(err){
-            return res.status(400).json({ "message":"user alerady exists in our database" })
+            return res.status(400).json({"message":err});
         }
+        return res.status(200).json({"message":"success"});
     },
 
     async getUserInfo(req, res){
@@ -133,6 +152,20 @@ module.exports = {
             return res.status(400).json({ "message": err.message });
         }
     },
+
+    async addFriend(req, res){
+        try{
+            const user = await modelUser.findById(req.body.id);
+            console.log(user.Friends);
+            await modelFriends.findByIdAndUpdate(user.Friends, {
+                $addToSet: {requests: req.userId}
+            }, {useFindAndModify: false});
+            res.status(200).json({"message":"success"});
+        }catch(err){
+            res.status(400).json({"message":err.message});
+        }
+        
+    }
     //TODO - mudar a senha
     
 }

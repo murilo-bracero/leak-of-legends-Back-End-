@@ -1,29 +1,45 @@
 const mongoose = require('mongoose');
-const mongoosePaginate = require('mongoose-paginate');
 const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
-    username:{
+    Username:{
         type: String,
         required: true,
         unique: true,
         maxlength: 16,
         minlength: 3
     },
-    password:{
+    Password:{
         type: String,
         required: true,
         select: false
     },
-    favs:{
+    Favs:{
         type: Array,
+    },
+    PerfilUri:{
+        type: String,
+        required: true
+    },
+    Country:{
+        type: String,
+        required: true,
+        minlength: 2,
+        maxlength: 2
+    },
+    Elo:{
+        type: String,
+        required: true,
+    },
+    Friends:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Friends'
     }
 });
 
-UserSchema.plugin(mongoosePaginate);
 UserSchema.pre('save', async function(next){
-    const hash = await bcrypt.hash(this.password, bcrypt.genSaltSync(10));
-    this.password = hash;
+    const hash = await bcrypt.hash(this.Password, bcrypt.genSaltSync(10));
+    this.Password = hash;
 
     next();
 });

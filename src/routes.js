@@ -5,6 +5,8 @@ const routes = express.Router();
 const UserController = require('./controllers/UserController');
 const LoginController = require('./controllers/LoginController');
 
+routes.get('/addFriend', mw, UserController.addFriend);
+
 routes.get('/getChamps', mw, UserController.getChamps);
 routes.get('/getnews/:page', mw, UserController.getNews);
 routes.post('/login', LoginController.login);
